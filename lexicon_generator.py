@@ -1,44 +1,5 @@
 import argparse
-from collections import Counter
-
-def extract_n_grams(file, n):
-    result = []
-    with open(file, "r") as f:
-        line = f.readline().rstrip()
-        while line:
-            tokens = line.split(" ")
-
-            if n==1:
-                for t in tokens:
-                    result.append(t)
-            else:
-                i=0
-                for k in range(1, len(tokens)):
-                    result.append([tokens[i], tokens[k]])
-                    i += 1
-
-            line = f.readline().rstrip()
-    return result
-
-def count_most_freq(_list,k):
-    """
-    Compute the most frequent occurences of words in a list
-    :param _list: the list containing the words
-    :param k: the threshold
-    :return: a list with the results
-    """
-    result = []
-    for e in Counter(_list).items():
-        if e[1] >= k:
-            result.append(e)
-    return result
-
-def count_least_freq(_list, k):
-    result = []
-    for e in Counter(_list).items():
-        if e[1] <= k:
-            result.append(e)
-    return result
+from utils import *
 
 if __name__ == "__main__":
 
@@ -86,8 +47,14 @@ if __name__ == "__main__":
     rare_words = count_least_freq(result, 1)
     print("[*] Lexicon without rare words (k==1): {}".format(len(unique_words)-len(rare_words)-len(most_freq)))
 
+    # Compute n-gram probabilities
+    print(compute_bi_gram_probability(result, extract_n_grams(file, 2)))
+
     # Save the result to file, if the user wants to
     if args.save:
         with open('lexicon.csv', 'w') as f:
-            for item in removed_res:
+            for item in result:
+                f.write("%s\n" % item)
+        with open('vocabulary.csv', 'w') as f:
+            for item in set(result):
                 f.write("%s\n" % item)
