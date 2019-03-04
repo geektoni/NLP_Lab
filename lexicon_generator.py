@@ -1,6 +1,24 @@
 import argparse
 from collections import Counter
 
+def extract_n_grams(file, n):
+    result = []
+    with open(file, "r") as f:
+        line = f.readline().rstrip()
+        while line:
+            tokens = line.split(" ")
+
+            if n==1:
+                for t in tokens:
+                    result.append(t)
+            else:
+                i=0
+                for k in range(1, len(tokens)):
+                    result.append([tokens[i], tokens[k]])
+                    i += 1
+
+            line = f.readline().rstrip()
+    return result
 
 def count_most_freq(_list,k):
     """
@@ -11,10 +29,16 @@ def count_most_freq(_list,k):
     """
     result = []
     for e in Counter(_list).items():
-        if e[1] > k:
+        if e[1] >= k:
             result.append(e)
     return result
 
+def count_least_freq(_list, k):
+    result = []
+    for e in Counter(_list).items():
+        if e[1] <= k:
+            result.append(e)
+    return result
 
 if __name__ == "__main__":
 
@@ -23,23 +47,17 @@ if __name__ == "__main__":
     parser.add_argument("file", type=str, help="The path to the file.")
     parser.add_argument("--stop_words", type=str, default="./NL2SparQL4NLU/extras/english.stop.txt",
                         help="The path to the stopwords file.")
-    parser.add_argument("--compute_n_grams", type=str, default=1, help="Compute n-grams instead of single word.")
+    parser.add_argument("--compute_n_grams", type=int, default=1, help="Compute n-grams instead of single word.")
     parser.add_argument("--save", action="store_true", default=False, help="Save the result to file.")
 
     args = parser.parse_args()
 
     file = args.file
     stopwords = args.stop_words
-    result = []
+    n_gram = args.compute_n_grams
 
-    # Create the lexicon file
-    with open(file, "r") as f:
-        line = f.readline().rstrip()
-        while line:
-            tokens = line.split(" ")
-            for t in tokens:
-                result.append(t)
-            line=f.readline().rstrip()
+    # Extract n-grams
+    result = extract_n_grams(file, n_gram)
 
     # Read all the stopwords
     stp_words = []
@@ -65,7 +83,7 @@ if __name__ == "__main__":
     print("[*] Lexicon without frequent words (k>100): {}".format(len(unique_words)-len(most_freq)))
 
     # Count rare words
-    rare_words = count_most_freq(result, 1)
+    rare_words = count_least_freq(result, 1)
     print("[*] Lexicon without rare words (k==1): {}".format(len(unique_words)-len(rare_words)-len(most_freq)))
 
     # Save the result to file, if the user wants to
