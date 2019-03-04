@@ -41,7 +41,7 @@ def extract_n_grams(file, n):
         line = f.readline().rstrip()
         while line:
             tokens = line.split(" ")
-
+            tokens = ["<s>"]+tokens+["</s>"]
             if n==1:
                 for t in tokens:
                     result.append(t)
