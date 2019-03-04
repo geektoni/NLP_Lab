@@ -18,7 +18,7 @@ if __name__ == "__main__":
     n_gram = args.compute_n_grams
 
     # Extract n-grams
-    result = extract_n_grams(file, n_gram)
+    result = extract_n_grams(file, 1)
 
     # Read all the stopwords
     stp_words = []

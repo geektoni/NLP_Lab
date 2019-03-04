@@ -22,17 +22,19 @@ def compute_probability(_list):
 
 def compute_bi_gram_probability(single_words, bi_grams_words):
     """
-    Compute bi-gram probabilities
+    Compute bi-gram probabilities using Laplace (Add One) Smoothing.
     :param single_words: list of single words
     :param bi_grams_words: list of bi-grams
     :return: a dictionary with the probabilities
     """
+    V = len(set(single_words))
     result = dict()
     probab = compute_probability(single_words)
     probab_n = compute_probability(bi_grams_words)
-    for w in probab_n[1]:
+    for w in probab_n[0]:
         words = w.split(" ")
-        result[words[1]+"|"+words[0]] = probab_n[0][w]/probab[0][words[0]]
+        result[words[1]+"|"+words[0]] = (probab_n[0][w]+1)/(probab[0][words[0]]+V)
+        assert((probab_n[0][w]+1)/(probab[0][words[0]]+V) <= 1)
     return result
 
 def extract_n_grams(file, n):
