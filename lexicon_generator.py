@@ -61,10 +61,12 @@ if __name__ == "__main__":
     print("[*] Unique words: {}".format(len(unique_words)))
 
     # Count the most frequent words
-    print("[*] Most frequent words (k>100): {}".format(len(count_most_freq(result, 100))))
+    most_freq = count_most_freq(result, 100)
+    print("[*] Lexicon without frequent words (k>100): {}".format(len(unique_words)-len(most_freq)))
 
     # Count rare words
-    print("[*] Rare words (k==1): {}".format(len(unique_words)-(len(count_most_freq(result, 1)))))
+    rare_words = count_most_freq(result, 1)
+    print("[*] Lexicon without rare words (k==1): {}".format(len(unique_words)-len(rare_words)-len(most_freq)))
 
     # Save the result to file, if the user wants to
     if args.save:
