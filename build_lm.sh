@@ -62,7 +62,7 @@ echo "[*] The string is: $generated_string"
 echo "[*] Computing perplexity on the given test dataset $test_data"
 ngramsymbols $test_data > test.txt
 farcompilestrings --symbols=lex.txt --unknown_symbol="<unk>" $test_data > test.far
-ngramperplexity --v=1 --OOV_symbol="<unk>" text.lm test.far
+ngramperplexity --OOV_symbol="<unk>" text.lm test.far
 
 # Clean the directory from the generated files
 rm lex.txt text.far text.cnts text.lm text_reduced.cnts test.txt test.far
