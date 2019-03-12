@@ -1,7 +1,13 @@
 from collections import Counter, defaultdict
 
 
-def read_file(_file):
+def read_file(_file) -> list:
+    """
+    Read a file given its path an return a list
+    of tokens taken from the file
+    :param _file: path to the file
+    :return: list of string tokens
+    """
     result = []
     with open(_file, "r") as f:
         line = f.readline().rstrip()
@@ -12,7 +18,13 @@ def read_file(_file):
             line = f.readline().rstrip()
     return result
 
+
 def compute_probability(_list):
+    """
+    Compute the probability of the token given a list
+    :param _list:
+    :return:
+    """
     result = dict()
     count = Counter(_list)
     total = len(_list)
