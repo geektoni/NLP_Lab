@@ -28,3 +28,15 @@ fstcompile --isymbols=$alphabeth -osymbols=$output_alphabeth $automata | fstrmep
 
 # Draw
 fstdraw -isymbols=$alphabeth -osymbols=$output_alphabeth -portrait automata.fsa | dot -Tjpg -Gdpi=500 >automata.jpg
+
+# We do a composition with another transducer which encodes a word and I compose
+# it with the original one. 
+fstcompile --acceptor=true --isymbols=$alphabeth -osymbols=$output_alphabeth >test.fsa <<EOF
+0 0 c
+0 0 i
+0 0 a
+0 0 o
+0
+EOF
+fstcompose test.fsa automata.fsa > output.fsa
+fstprint --isymbols=$alphabeth -osymbols=$output_alphabeth output.fsa
